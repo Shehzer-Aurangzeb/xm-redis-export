@@ -58,6 +58,16 @@ test('throws on a cookie without name or host', () => {
   assert.throws(() => xmlToRedisEntries('<config><cookies><cookie name="dlp">x</cookie></cookies></config>'));
 });
 
+test('throws on a duplicate cookie instead of silently keeping the last one', () => {
+  const xml = `
+    <config><cookies>
+      <cookie name="dlp" host="amazon">first</cookie>
+      <cookie name="dlp" host="amazon">second</cookie>
+    </cookies></config>`;
+
+  assert.throws(() => xmlToRedisEntries(xml), /Duplicate <cookie> name="dlp" host="amazon"/);
+});
+
 test('throws on invalid xml or a missing <config> root', () => {
   assert.throws(() => xmlToRedisEntries('<config><subdomains>'), /Invalid XML at line 1/);
   assert.throws(() => xmlToRedisEntries('<other></other>'), /Missing <config>/);

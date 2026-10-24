@@ -25,7 +25,9 @@ export function xmlToRedisEntries(xml: string): Record<string, string> {
   const entries: Record<string, string> = { subdomains: JSON.stringify(subdomains) };
   for (const { name, host, '#text': value = '' } of cookies) {
     if (!name || !host) throw new Error(`<cookie> needs name and host attributes, got: ${value}`);
-    entries[`cookie:${name}:${host}`] = value;
+    const key = `cookie:${name}:${host}`;
+    if (Object.hasOwn(entries, key)) throw new Error(`Duplicate <cookie> name="${name}" host="${host}"`);
+    entries[key] = value;
   }
   return entries;
 }
