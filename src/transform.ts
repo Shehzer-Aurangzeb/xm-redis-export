@@ -1,4 +1,4 @@
-import { XMLParser } from 'fast-xml-parser';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
 
 type Cookie = { name?: string; host?: string; '#text'?: string };
 
@@ -10,7 +10,13 @@ const parser = new XMLParser({
 });
 
 export function xmlToRedisEntries(xml: string): Record<string, string> {
-  const { config } = parser.parse(xml, true);
+  const validation = XMLValidator.validate(xml);
+  if (validation !== true) {
+    const { msg, line, col } = validation.err;
+    throw new Error(`Invalid XML at line ${line}, column ${col}: ${msg}`);
+  }
+
+  const { config } = parser.parse(xml);
   if (config === undefined) throw new Error('Missing <config> root element');
 
   const subdomains: string[] = config.subdomains?.subdomain ?? [];

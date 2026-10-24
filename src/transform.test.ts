@@ -59,7 +59,7 @@ test('throws on a cookie without name or host', () => {
 });
 
 test('throws on invalid xml or a missing <config> root', () => {
-  assert.throws(() => xmlToRedisEntries('<config><subdomains>'));
+  assert.throws(() => xmlToRedisEntries('<config><subdomains>'), /Invalid XML at line 1/);
   assert.throws(() => xmlToRedisEntries('<other></other>'), /Missing <config>/);
 });
 
