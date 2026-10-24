@@ -1,0 +1,20 @@
+{
+  "name": "emaww-xml-redis-export",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test src/*.test.ts",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.11.2",
+    "redis": "^6.3.0"
+  }
+}
